@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>1.Área de un triangulo</h1>
+    <script>
+        function areaTriangulo(){
+            let Base, Altura, Area;
+            Base=parseFloat(document.getElementById("Base").value)
+            Altura=parseFloat(document.getElementById("Altura").value)
+            Area= (Base*Altura)/2
+            document.getElementById("Area").value=Area
+        }
+    </script>
+    <label for="Base">Base:</label> <input type="number" placeholder="Introduce la base del triangulo" id="Base">
+    <label for="Altura">Altura:</label> <input type="number" placeholder="Introduce la altura del triangulo" id="Altura"><br>
+    <button onclick="areaTriangulo()">Calcular</button>
+    <label for="Area">Area:</label> <input type="number" id="Area" readonly> <hr>
+
+    <h1>2.Volumen de una esfera </h1>
+    <script>
+        function volumenEsfera(){
+            let Radio, Volumen;
+            Radio=parseFloat(document.getElementById("Radio").value)
+            Volumen = (4/3)*3.1416*(Radio**3)
+            document.getElementById("Volumen").value=Volumen
+        }
+</script>
+    <label for="Radio">Radio:</label> <input type="number" placeholder="Introduce el radio de la esfera" id="Radio"> <br>
+    <button onclick="volumenEsfera()">Calcular:</button>
+    <label for="Volumen">Volumen:</label> <input type="number" id="Volumen" readonly> <hr>
+
+    <h1>3. Conversión Dólares a Pesos y viceversa</h1>
+    <script>
+        let dolares, pesos;
+        function dolaresPesos(){
+            dolares=parseFloat(document.getElementById("Dolares").value)
+            pesos=dolares*17.18
+            document.getElementById("Conversion").value=pesos
+            
+            
+        }
+        function pesosDolares(){
+            pesos=parseFloat(document.getElementById("Pesos").value)
+            dolares=pesos/17.18
+            document.getElementById("Conversion").value=dolares
+
+        }
+
+    </script>
+    <label for="Dolares">Dolares:</label> <input type="number" placeholder="Introduce los dolares a convertir" id="Dolares">
+    <button onclick="dolaresPesos()">Convertir a pesos</button> <br>
+    <label for="Pesos">Pesos:</label> <input type="number" placeholder="Introduce los pesos a convertir" id="Pesos"><br>
+    <button onclick="pesosDolares()">Convertir a dolares</button>
+    <label for="Conversion">Conversion:</label> <input type="number" id="Conversion" readonly>
+
+</body>
+</html>
