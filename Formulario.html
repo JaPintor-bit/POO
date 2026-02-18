@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   Nombre:
+   <input type="text" id="nombre">
+   <br>
+   Edad:
+   <input type="number" id="edad">
+   <br>
+   Correo:
+   <input type="text" id="correo">
+   <button onclick="capturar()">Capturar datos</button>
+   <button onclick="borrar()">Borrar datos</button>
+   <div id="resultado"></div>
+
+   <script>
+       function capturar() {
+        let nombre, edad, correo;
+        nombre=document.getElementById("nombre")
+        edad=document.getElementById("edad")
+        correo=document.getElementById("correo")
+        // En caso de que falten datos
+        if (nombre.value == ""){
+            document.getElementById("resultado").innerHTML = "Por favor introduce tu nombre"
+        }
+        else if (edad.value == ""){
+            document.getElementById("resultado").innerHTML = "Por favor introduce tu edad"
+        }
+        else if (correo.value == ""){
+            document.getElementById("resultado").innerHTML = "Por favor introduce tu correo"
+        }
+        else {
+            document.getElementById("resultado").innerHTML = nombre.value + ", " + edad.value + " Años, " + correo.value
+        }
+       }
+       //Borra tanto el texto con los datos como los campos para introducir dichos datos
+       function borrar(){
+        document.getElementById("nombre").value = ""
+        document.getElementById("edad").value = ""
+        document.getElementById("correo").value = ""
+        document.getElementById("resultado").innerHTML = ""
+       }
+   </script>
+</body>
+</html>
