@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        .section { margin-top: 12px; }
+        label { margin-right: 6px; }
+    </style>
+</head>
+<body>
+<!-- Selector de la operación a realizar, utiliza el eventlistener on change (se activa cuando cambia el valor de "calcType")-->
+    <h1>Calculadora de ejemplos</h1>
+    <label for="calcType">Seleccione tipo de cálculo:</label>
+    <select id="calcType" onchange="showSection()">
+        <option value="">-- Seleccione --</option>
+        <option value="triangulo">Área de un triángulo</option>
+        <option value="esfera">Volumen de una esfera</option>
+        <option value="dolaresPesos">Dólares a Pesos</option>
+        <option value="pesosDolares">Pesos a Dólares</option>
+    </select>
+
+    <div id="triangulo" class="section" style="display:none">
+        <h2>Área de un triángulo</h2>
+        <label for="baseTri">Base:</label>
+        <input type="number" id="baseTri" placeholder="Introduce la base">
+        <label for="alturaTri">Altura:</label>
+        <input type="number" id="alturaTri" placeholder="Introduce la altura"><br>
+        <button onclick="areaTriangulo()">Calcular</button>
+        <button onclick="limpiarTriangulo()">Limpiar</button>
+        <label for="areaTri">Área:</label>
+        <input type="text" id="areaTri" readonly>
+    </div>
+
+    <div id="esfera" class="section" style="display:none">
+        <h2>Volumen de una esfera</h2>
+        <label for="radioEsf">Radio:</label>
+        <input type="number" id="radioEsf" placeholder="Introduce el radio"><br>
+        <button onclick="volumenEsfera()">Calcular</button>
+        <button onclick="limpiarEsfera()">Limpiar</button>
+        <label for="volumenEsf">Volumen:</label>
+        <input type="text" id="volumenEsf" readonly>
+    </div>
+
+    <div id="dolaresPesos" class="section" style="display:none">
+        <h2>Convertir Dólares a Pesos</h2>
+        <label for="dolaresInput">Dólares:</label>
+        <input type="number" id="dolaresInput" placeholder="Introduce dólares"><br>
+        <button onclick="convertDolaresPesos()">Convertir</button>
+        <button onclick="limpiarDolaresPesos()">Limpiar</button>
+        <label for="conversionDP">Pesos:</label>
+        <input type="text" id="conversionDP" readonly>
+    </div>
+
+    <div id="pesosDolares" class="section" style="display:none">
+        <h2>Convertir Pesos a Dólares</h2>
+        <label for="pesosInput">Pesos:</label>
+        <input type="number" id="pesosInput" placeholder="Introduce pesos"><br>
+        <button onclick="convertPesosDolares()">Convertir</button>
+        <button onclick="limpiarPesosDolares()">Limpiar</button>
+        <label for="conversionPD">Dólares:</label>
+        <input type="text" id="conversionPD" readonly>
+    </div>
+
+    <script>
+        // Rate es la tasa de cambio de dolares a pesos (17.18 al momento de hacer el programa)
+        const RATE = 17.18;
+
+        function hideAll() {
+            document.getElementById('triangulo').style.display = 'none';
+            document.getElementById('esfera').style.display = 'none';
+            document.getElementById('dolaresPesos').style.display = 'none';
+            document.getElementById('pesosDolares').style.display = 'none';
+        }
+        function showSection(){
+            const sel = document.getElementById('calcType').value;
+            hideAll();
+            if(!sel) return;
+            document.getElementById(sel).style.display = 'block';
+        }
+        // Todas las fucniones tienen un if para validar que la entrada sea mayor a 0 (el type del input es number por lo que no se requiere validación de que sea un número)
+        function areaTriangulo(){
+            const base = parseFloat(document.getElementById('baseTri').value);
+            const altura = parseFloat(document.getElementById('alturaTri').value);
+            if (base <= 0 || altura <= 0) {
+                document.getElementById('areaTri').value = "Error, no puede ser menor o igual a 0";
+                return;
+            }
+            else {
+            const area = (base * altura) / 2;
+            document.getElementById('areaTri').value = area.toFixed(2);
+            }
+        }
+
+        function volumenEsfera(){
+            const r = parseFloat(document.getElementById('radioEsf').value);
+            if (r <= 0) {
+                document.getElementById('volumenEsf').value = "Error, no puede ser menor o igual a 0";
+                return;
+            }
+            else {
+            const volumen = (4/3) * Math.PI * Math.pow(r, 3);
+            document.getElementById('volumenEsf').value = volumen.toFixed(2);
+        }
+        }
+
+        function convertDolaresPesos(){
+            const d = parseFloat(document.getElementById('dolaresInput').value);
+            if (d <= 0) {
+                document.getElementById('conversionDP').value = "Error, no puede ser menor o igual a 0";
+                return;
+            }   
+            else {
+                const p = d * RATE;
+                document.getElementById('conversionDP').value = p.toFixed(2);
+            }   
+        }
+
+        function convertPesosDolares(){
+            const p = parseFloat(document.getElementById('pesosInput').value);
+            if (p <= 0) {
+                document.getElementById('conversionPD').value = "Error, no puede ser menor o igual a 0";
+            }
+            else {
+                const d = p / RATE;
+                document.getElementById('conversionPD').value = d.toFixed(2);
+            }
+        }
+        // Funciones para limpiar los datos de cada sección, aparecen solamente cuando se selecciona la sección correspondiente, utilizan el id de los inputs y cambian su valor a uno vacio.
+        function limpiarTriangulo(){
+            document.getElementById('baseTri').value = '';
+            document.getElementById('alturaTri').value = '';
+            document.getElementById('areaTri').value = '';
+        }
+
+        function limpiarEsfera(){
+            document.getElementById('radioEsf').value = '';
+            document.getElementById('volumenEsf').value = '';
+        }
+
+        function limpiarDolaresPesos(){
+            document.getElementById('dolaresInput').value = '';
+            document.getElementById('conversionDP').value = '';
+        }
+
+        function limpiarPesosDolares(){
+            document.getElementById('pesosInput').value = '';
+            document.getElementById('conversionPD').value = '';
+        }
+        
+    </script>
+</body>
+</html>
