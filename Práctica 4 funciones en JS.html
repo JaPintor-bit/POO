@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    introduce un numero: <input type="number" id="num">
+    <button onclick="resultadoFunciones()">Calcular</button>
+    <script>
+        function esPar(num) {
+            if (num % 2 === 0) 
+                return console.log("Es par");
+             else 
+                return console.log("Es impar");
+            
+        }
+        esPar(4);
+        const factorial = function (num) {
+             if (num === 0 || num === 1) 
+                return 1;
+             else if (num < 0) 
+                return console.log("No existen factoriales negativos");
+            else 
+                return num * factorial(num - 1);
+            
+        }
+        console.log(factorial(5));
+        const sumaArray = (arr) => {
+            let suma = 0;
+            for (let i = 0; i < arr.length; i++) {
+                suma += arr[i];
+            }
+            return suma;
+        }
+        console.log(sumaArray([1, 2, 3, 4, 5]));
+        function cuadradoTrad(num) {
+            return num * num;
+        }
+        const cuadrado = function (num) {
+            return num * num;
+        }
+        const cuadradoArrow = (num) => num * num;
+        console.log(cuadradoTrad(5));
+        console.log(cuadrado(5));
+        console.log(cuadradoArrow(5));
+        
+        const calcCuadradoArrow=num => num*num;
+
+        const calcCuadradoAnon = function (num){
+            return calcCuadradoArrow(num);
+        }
+        function calcCuadrado(num){
+            return calcCuadradoAnon(num)
+        }
+        calcCuadrado(5)
+        function resultadoFunciones(){
+            const num = document.getElementById("num").value;
+            console.log(`El cuadrado de ${num} es: ${calcCuadrado(num)}`);
+        }
+    </script>
+</body>
+</html>
