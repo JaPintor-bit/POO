@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="barrafiltro">
+        <label for="filtro">Filtrar:</label>
+        <input type="text" id="filtro" placeholder="Filtrar contactos...">
+
+        <label for="filtroCampo">Por:</label>
+        <select id="filtroCampo">
+            <option value="all">Todo</option>
+            <option value="nombre">Nombre</option>
+            <option value="direccion">Dirección</option>
+            <option value="telefono">Teléfono</option>
+            <option value="email">Email</option>
+        </select>
+    </div>
+    <h1>Agenda para jodidos como yo</h1>
+    <div id="contactCounter">Total de contactos: 0</div>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre"> <br>
+
+    <label for="direccion">Dirección:</label>
+    <input type="text" id="direccion" name="direccion"> <br>
+
+    <label for="telefono">Teléfono:</label>
+    <input type="text" id="telefono" name="telefono"> <br>  
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"> <br>  
+
+    <label for="urlFoto">URL de la foto:</label>
+    <input type="text" id="urlFoto" name="urlFoto"> <br>
+
+    <button id="guardar" onclick="guardarDatos()">Guardar</button>
+    <div id="listado"></div>
+<dialog id="miModal">
+   
+        <label for="enombre">Nombre:</label>
+        <input type="text" id="enombre" name="nombre"> <br>
+
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="edireccion" name="direccion"> <br>
+
+        <label for="etelefono">Teléfono:</label>
+        <input type="text" id="etelefono" name="telefono"> <br>
+
+        <label for="eemail">Email:</label>
+        <input type="email" id="eemail" name="email"> <br>
+
+        <label for="eurlFoto">URL de la foto:</label>
+        <input type="text" id="eurlFoto" name="urlFoto"> <br>
+
+        <button type="button" onclick="guardarEditar()">Guardar</button>
+        <button type="button" onclick="cerrarModal()">Cancelar</button>
+    </form>
+</dialog>
+<script>
+    let agenda=[];
+    let indice=-1;
+
+    function actualizarContador() {
+        document.getElementById('contactCounter').innerText = 'Total de contactos: ' + agenda.length;
+    }
+
+    function GuardarLocal(){
+        localStorage.setItem("agenda", JSON.stringify(agenda));
+    }
+
+    function CargarLocal(){
+        let datos = localStorage.getItem("agenda");
+        if(datos){
+            agenda = JSON.parse(datos);
+            mostrarAgenda();
+        }
+        actualizarContador();
+    }
+
+    function filtrarAgenda() {
+        const filtro = document.getElementById("filtro").value.trim().toLowerCase();
+        const campo = document.getElementById("filtroCampo").value;
+
+        if (!filtro) {
+            mostrarAgenda();
+            return;
+        }
+
+        const filtrados = agenda.filter(contacto => {
+            if (campo === "all") {
+                return (
+                    contacto.nombre.toLowerCase().includes(filtro) ||
+                    contacto.direccion.toLowerCase().includes(filtro) ||
+                    contacto.telefono.toLowerCase().includes(filtro) ||
+                    contacto.email.toLowerCase().includes(filtro)
+                );
+            }
+
+            const valor = (contacto[campo] || "").toLowerCase();
+            return valor.includes(filtro);
+        });
+
+        mostrarAgenda(filtrados);
+    }
+
+    function guardarDatos() {
+        let nombre = document.getElementById("nombre").value;
+        let direccion = document.getElementById("direccion").value;
+        let telefono = document.getElementById("telefono").value;
+        let email = document.getElementById("email").value;
+        let urlFoto = document.getElementById("urlFoto").value;
+
+        let contacto = {
+            nombre: nombre,
+            direccion: direccion,
+            telefono: telefono,
+            email: email,
+            urlFoto: urlFoto
+        };
+
+        agenda.push(contacto);
+        GuardarLocal();
+        mostrarAgenda();
+        actualizarContador();
+        console.log(agenda);
+    }
+
+    function guardarEditar() {
+        agenda[indice].nombre = document.getElementById("enombre").value;
+        agenda[indice].direccion = document.getElementById("edireccion").value;
+        agenda[indice].telefono = document.getElementById("etelefono").value;
+        agenda[indice].email = document.getElementById("eemail").value;
+        agenda[indice].urlFoto = document.getElementById("eurlFoto").value;
+
+        GuardarLocal();
+        mostrarAgenda();
+        actualizarContador();
+        cerrarModal();
+    }  
+    function cerrarModal() {
+        document.getElementById("miModal").close();
+    }
+
+    function editarContacto(index) {
+        indice = index;
+        let contacto = agenda[index];
+        document.getElementById("enombre").value = contacto.nombre;
+        document.getElementById("edireccion").value = contacto.direccion;
+        document.getElementById("etelefono").value = contacto.telefono;
+        document.getElementById("eemail").value = contacto.email;
+        document.getElementById("eurlFoto").value = contacto.urlFoto;
+        document.getElementById("miModal").showModal();
+    }
+
+    function eliminarContacto(index) {       
+        if (confirm("¿Estás seguro de que deseas eliminar este contacto?")) {
+            agenda.splice(index, 1);
+            GuardarLocal();
+            mostrarAgenda();
+            actualizarContador();
+        }
+    }
+    function mostrarAgenda(lista = agenda) {
+        let listado = document.getElementById("listado");
+        let html = "<h2>Contactos:</h2><ul>";
+        lista.forEach((contacto, index) => {
+            html += `
+                <li>
+                    <h3>Contacto ${index + 1}</h3>
+                    <p><strong>Nombre:</strong> ${contacto.nombre}</p>
+                    <p><strong>Dirección:</strong> ${contacto.direccion}</p>
+                    <p><strong>Teléfono:</strong> ${contacto.telefono}</p>
+                    <p><strong>Email:</strong> ${contacto.email}</p>
+                    <p><strong>Foto:</strong> <img src="${contacto.urlFoto}" alt="Foto de ${contacto.nombre}" width="100"></p>
+                    <p><button onclick="editarContacto(${index})">Editar</button></p>
+                    <p><button onclick="eliminarContacto(${index})">Eliminar</button></p>
+                </li>
+            `;
+        });
+        html += "</ul>";
+        listado.innerHTML = html;
+    }
+
+    document.getElementById("filtro").addEventListener("input", filtrarAgenda);
+    document.getElementById("filtroCampo").addEventListener("change", filtrarAgenda);
+
+    CargarLocal();
+</script>
+</body>
+</html>
